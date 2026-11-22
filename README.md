@@ -4,7 +4,11 @@ Sitio independiente para una asesora inmobiliaria. Se publicará en GitHub Pages
 
 ## Estado
 
-Repositorio y dominio preparados. El contenido, la identidad visual, la asesora titular y el filtro exacto de sus propiedades se definirán antes de activar el catálogo y los formularios.
+Prototipo visual multipágina basado en la referencia Lumera y en el fondo animado proporcionado. La asesora titular, su fotografía, contacto y el filtro exacto de sus propiedades se definirán antes de activar el catálogo y los formularios.
+
+## Desarrollo
+
+`node scripts/build.mjs` genera las siete páginas HTML. El sitio se publica desde la raíz de `main` en GitHub Pages.
 
 ## Principios técnicos
 
