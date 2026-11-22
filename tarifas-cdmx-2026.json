@@ -1,0 +1,6 @@
+{
+  "year": 2026,
+  "isai": { "status": "pending_official_verification", "source": null, "sourceDate": null, "brackets": [] },
+  "rpp": { "status": "pending_official_verification", "source": null, "sourceDate": null, "amount": null },
+  "jornadaNotarial": { "status": "pending_official_verification", "source": null, "sourceDate": null, "brackets": [], "eligibility": null }
+}

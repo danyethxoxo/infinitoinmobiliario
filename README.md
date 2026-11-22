@@ -1,18 +1,19 @@
 # Infinito Inmobiliario
 
-Sitio independiente para una asesora inmobiliaria. Se publicará en GitHub Pages bajo `infinitoinmobiliario.com` y usará el proyecto Supabase `kwpremier web` (`iloetojomzqtadkithtv`) para consultar el inventario autorizado.
+Sitio independiente de Almendra Núñez para asesoría inmobiliaria en CDMX. Publicación en GitHub Pages con dominio infinitoinmobiliario.com.
 
-## Estado
+## Páginas
 
-Prototipo visual multipágina basado en la referencia Lumera y en el fondo animado proporcionado. La asesora titular, su fotografía, contacto y el filtro exacto de sus propiedades se definirán antes de activar el catálogo y los formularios.
+Inicio, Conóceme, Propiedades, ¿Qué necesitas?, Herramientas y Contacto. Las rutas antiguas de Comprar, Vender, Rentar y Asesora redirigen a la nueva arquitectura.
 
-## Desarrollo
+`node scripts/build.mjs` genera el HTML desde un único archivo de contenido. `styles.css`, `motion.css` y `content.css` contienen la presentación; `site.js` y `tools.js` contienen interacciones.
 
-`node scripts/build.mjs` genera las siete páginas HTML. El sitio se publica desde la raíz de `main` en GitHub Pages.
+## Datos fiscales
 
-## Principios técnicos
+`tarifas-cdmx-2026.json` separa ISAI, RPP y Jornada Notarial del código. Los parámetros están vacíos hasta verificar el Código Fiscal y la Gaceta Oficial vigentes. `udi-oficial.json` conserva valor, fecha y fuente oficial de Banxico. El simulador de ISR multiplica 700,000 por el valor verificado de la UDI; mientras no exista un dato oficial cargado, no presenta tope en pesos.
 
-- Separar los datos propios de este sitio de las tablas y permisos de KW Premier y Confort4.
-- Mostrar solo inmuebles publicados y asociados a la asesora confirmada.
-- Mantener claves privadas y datos de prospectos fuera del código público.
-- Verificar las políticas RLS antes de cualquier lectura directa desde el navegador.
+El diagnóstico no determina ISR. El notario público revisa la exención, la ganancia, las deducciones y la retención definitiva.
+
+## Publicación pendiente
+
+El catálogo requiere el identificador de Almendra en el inventario KW Premier y verificación de permisos. Foto, video, WhatsApp, formulario y perfil de Google Business requieren datos autorizados. El sitio mantiene `noindex` mientras esas piezas están incompletas.
