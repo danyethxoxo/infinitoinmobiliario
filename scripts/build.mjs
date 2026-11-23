@@ -97,3 +97,4 @@ for(const page of pages){
 for(const [oldPage,target] of [['comprar.html','necesitas.html#comprar'],['vender.html','necesitas.html#vender'],['rentar.html','necesitas.html#rentar'],['asesora.html','conoceme.html']]){
   fs.writeFileSync(oldPage,`<!doctype html><html lang="es-MX"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=${target}"><meta name="robots" content="noindex"><link rel="canonical" href="https://infinitoinmobiliario.com/${target}"><title>Redirigiendo | Infinito Inmobiliario</title></head><body><p>Esta sección cambió de dirección. <a href="${target}">Ir a la página actual</a>.</p></body></html>`);
 }
+await import('./enrich.mjs');

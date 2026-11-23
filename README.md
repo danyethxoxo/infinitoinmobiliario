@@ -6,7 +6,9 @@ Sitio independiente de Almendra Núñez para asesoría inmobiliaria en CDMX. Pub
 
 Inicio, Conóceme, Propiedades, ¿Qué necesitas?, Herramientas y Contacto. Las rutas antiguas de Comprar, Vender, Rentar y Asesora redirigen a la nueva arquitectura.
 
-`node scripts/build.mjs` genera el HTML desde un único archivo de contenido. `styles.css`, `motion.css` y `content.css` contienen la presentación; `site.js` y `tools.js` contienen interacciones.
+`node scripts/build.mjs` genera el HTML principal y ejecuta `scripts/enrich.mjs` para incorporar guías, diagnósticos, FAQ y metadatos. `styles.css`, `motion.css` y `content.css` contienen la presentación; `site.js` y `tools.js` contienen interacciones.
+
+Las seis guías cubren compra frente a renta, prevención de fraude, crédito hipotecario, renta, comparación de colonias y venta de inmuebles heredados o hipotecados. Los tres microdiagnósticos orientan sin presentar una valuación automática, una aprobación de crédito ni un dictamen legal. El contenido evita publicar precios por metro cuadrado sin muestra actual y fuente identificable.
 
 ## Datos fiscales
 

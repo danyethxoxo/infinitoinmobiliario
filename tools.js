@@ -31,7 +31,7 @@ form?.addEventListener('submit', async event => {
     : data.get('prior') === 'yes'
       ? '<strong>No se cumple la condición de tres años.</strong><p>Si ya aplicaste esta exención durante los tres años anteriores, consulta con el notario el ISR que corresponda.</p>'
       : '<strong>Posible candidatura a exención.</strong><p>La acreditación de casa habitación y la operación deben revisarse ante fedatario público.</p>';
-  result.innerHTML = eligibility + note + '<p>Cálculo estimado con fines informativos; la liquidación definitiva siempre la determina el notario público al día de la firma.</p>';
+  result.innerHTML = eligibility + note + '<p>Cálculo estimado con fines informativos; la liquidación definitiva siempre la determina el notario público al día de la firma.</p><p><a href="contacto.html">¿Qué documentos y facturas conviene revisar antes de vender? Continúa con Almendra.</a></p>';
 });
 
 document.querySelectorAll('.faq-tab').forEach(button => button.addEventListener('click', () => {
@@ -42,3 +42,79 @@ document.querySelectorAll('.faq-tab').forEach(button => button.addEventListener(
   });
   document.querySelectorAll('.faq-panel').forEach(panel => panel.hidden = panel.dataset.faqPanel !== button.dataset.faq);
 }));
+
+const pathForm = document.querySelector('#path-form');
+if (pathForm) {
+  const first = document.querySelector('#path-first');
+  const second = document.querySelector('#path-second');
+  const third = document.querySelector('#path-third');
+  const pathResult = document.querySelector('#path-result');
+  const paths = {
+    comprar: [
+      '<label>Presupuesto máximo aproximado (MXN)<input name="budget" type="number" min="1" step="1" inputmode="numeric" required placeholder="Tu presupuesto"></label>',
+      '<label>¿Cómo planeas pagar?<select name="credit" required><option value="">Selecciona</option><option value="bancario">Crédito bancario</option><option value="infonavit">Infonavit o Cofinavit</option><option value="contado">Recursos propios</option></select></label>',
+      '<label>Alcaldía o zona que te interesa<input name="zone" maxlength="80" required placeholder="Ej. Coyoacán"></label>'
+    ],
+    vender: [
+      '<label>Colonia del inmueble<input name="colony" maxlength="80" required placeholder="Ej. Del Valle"></label>',
+      '<label>Superficie construida aproximada (m²)<input name="area" type="number" min="1" step="1" required placeholder="Ej. 95"></label><label>Recámaras<select name="rooms" required><option value="">Selecciona</option><option>1</option><option>2</option><option>3</option><option>4 o más</option></select></label>',
+      '<label>Situación documental<select name="deed" required><option value="">Selecciona</option><option value="inscrita">Escritura inscrita</option><option value="hipoteca">Hipoteca vigente</option><option value="sucesion">Sucesión o herencia en trámite</option><option value="revisar">Necesito revisarlo</option></select></label>'
+    ],
+    rentar: [
+      '<label>¿Cuál es tu papel?<select name="role" required><option value="">Selecciona</option><option value="propietario">Soy propietario</option><option value="inquilino">Busco rentar</option></select></label>',
+      '<label>Zona principal<input name="rentzone" maxlength="80" required placeholder="Alcaldía o colonia"></label>',
+      '<label>¿Qué te preocupa más?<select name="concern" required><option value="">Selecciona</option><option value="documentos">Documentos y requisitos</option><option value="tiempo">Tiempo para concretar</option><option value="seguridad">Seguridad de la operación</option></select></label>'
+    ]
+  };
+  let currentPath = 'comprar';
+  let step = 1;
+  function renderPath() {
+    [first.innerHTML, second.innerHTML, third.innerHTML] = paths[currentPath];
+    document.querySelectorAll('.path-step').forEach(fieldset => fieldset.hidden = Number(fieldset.dataset.step) !== step);
+    pathResult.hidden = true;
+  }
+  document.querySelectorAll('[data-path]').forEach(button => button.addEventListener('click', () => {
+    currentPath = button.dataset.path;
+    step = 1;
+    document.querySelectorAll('[data-path]').forEach(tab => {
+      const active = tab === button;
+      tab.classList.toggle('active', active);
+      tab.setAttribute('aria-pressed', String(active));
+    });
+    renderPath();
+  }));
+  pathForm.querySelectorAll('[data-next]').forEach(button => button.addEventListener('click', () => {
+    const active = pathForm.querySelector(`.path-step[data-step="${step}"]`);
+    if (![...active.querySelectorAll('input, select')].every(input => input.reportValidity())) return;
+    step = Math.min(step + 1, 3);
+    renderPathStep();
+  }));
+  pathForm.querySelectorAll('[data-back]').forEach(button => button.addEventListener('click', () => {
+    step = Math.max(step - 1, 1);
+    renderPathStep();
+  }));
+  function renderPathStep() {
+    document.querySelectorAll('.path-step').forEach(fieldset => fieldset.hidden = Number(fieldset.dataset.step) !== step);
+    pathForm.querySelector(`.path-step[data-step="${step}"]`)?.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  pathForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const data = new FormData(pathForm);
+    let message = '';
+    if (currentPath === 'comprar') {
+      message = `<strong>Tu búsqueda empieza por capacidad de compra y zona.</strong><p>Presupuesto indicado: ${money(Number(data.get('budget')))}. Forma de pago: ${data.get('credit')}. Zona de interés: ${escapeHtml(data.get('zone'))}. Antes de elegir inmueble, confirma preaprobación, enganche y gastos de escrituración con fuentes vigentes.</p><a href="herramientas.html#escrituracion">Revisa los costos de escrituración</a> · <a href="guia-credito-hipotecario.html">Lee la guía de crédito</a>`;
+    } else if (currentPath === 'vender') {
+      message = `<strong>El siguiente paso es un estudio comparativo, no una cifra automática.</strong><p>Colonia: ${escapeHtml(data.get('colony'))}; superficie: ${Number(data.get('area'))} m²; recámaras: ${escapeHtml(data.get('rooms'))}. Situación documental: ${escapeHtml(data.get('deed'))}. Reúne escritura, información física y comparables recientes para revisar precio y tiempos.</p><a href="herramientas.html#isr">Revisa posible exención ISR</a> · <a href="guia-casa-heredada-hipoteca.html">Casos especiales</a>`;
+    } else {
+      const role = data.get('role') === 'propietario' ? 'propietario' : 'inquilino';
+      message = `<strong>Ruta de renta para ${role}.</strong><p>Zona: ${escapeHtml(data.get('rentzone'))}. Prioridad: ${escapeHtml(data.get('concern'))}. Revisa condiciones, documentos, estado del inmueble y contrato antes de comprometer recursos.</p><a href="guia-renta-segura.html">Abrir checklist de renta</a>`;
+    }
+    pathResult.innerHTML = message + '<p>Esta orientación no constituye valuación, aprobación de crédito ni dictamen jurídico.</p>';
+    pathResult.hidden = false;
+    pathResult.scrollIntoView({behavior:'smooth',block:'nearest'});
+  });
+  renderPath();
+}
+function escapeHtml(value) {
+  return String(value ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+}
